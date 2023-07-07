@@ -25,12 +25,12 @@ sessionRouter.get('/login', (req, res) => {
 sessionRouter.post('/login', async (req, res) => {
     let user = req.body;
     let result = await getByEmail(user.email)
-    if(user.password !== result.password){
+    if(result && user.password !== result.password){
         res.render('login-error',{})
     }
     console.log(result)
     req.session.user = user.email;
-    res.render('datos', { user: req.sessionID.user })
+    res.redirect('/');
 })
 
 sessionRouter.get('/profile', authMiddleware, async (req, res) => {
@@ -44,11 +44,12 @@ sessionRouter.get('/logout', (req, res) => {
     })
 })
 
-sessionRouter.get('/admin', authMiddleware, (req, res) => {
-    if (req.session.role === "admin") {
+sessionRouter.get('/admin', authMiddleware, async (req, res) => {
+    let user = await getByEmail(req.session.user);
+    if (user.role === "admin") {
         res.render('admin-view', {});
     } else {
-        res.render('user-view', {});
+        res.redirect('/');
     }
 })
 
