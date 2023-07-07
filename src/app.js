@@ -9,8 +9,23 @@ import homeRouter from "./routes/home.routes.js";
 import productsRouter from "./routes/products.routes.js";
 import realTimeRoutes from "./routes/realTime.routes.js";
 import messagesRouter from "./routes/messages.routes.js";
+import sessionRouter from "./routes/session.routes.js";
+
+import session from 'express-session';
+import MongoStore from 'connect-mongo';
 
 const app = express();
+
+app.use(session({
+    store: MongoStore.create({
+        mongoUrl: 'mongodb+srv://Coder:spiderverse2099@coder.qugttqn.mongodb.net/session?retryWrites=true&w=majority',
+        mongoOptions: { useUnifiedTopology: true },
+        ttl: 3600
+    }),
+    secret: 'welcometothejungle',
+    resave: false,
+    saveUninitialized: false
+}))
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -31,6 +46,7 @@ app.use("/api/cart", cartRouter);
 app.use("/", homeRouter);
 app.use("/realtimeproducts", realTimeRoutes);
 app.use("/chat", messagesRouter);
+app.use("/api/session", sessionRouter)
 
 const server = app.listen(8080, () =>
     console.log("Corriendo en el puerto: 8080")
