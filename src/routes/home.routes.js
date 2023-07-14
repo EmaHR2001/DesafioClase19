@@ -8,7 +8,7 @@ homeRouter.get("/", async (req, res) => {
     try {
         let limit = req.query.limit;
         let products = await manager.getProducts();
-        let user = await loginVerification(req.session.user);
+        let user = await loginVerification(req.user.email);
         if (limit) {
             let limitedProducts = products.slice(0, limit);
             res.render("index", { products: limitedProducts, firstName: user?.first_name });

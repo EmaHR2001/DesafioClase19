@@ -35,6 +35,17 @@ export const getByEmail = async email => {
     return result;
 }
 
+export const getById = async id => {
+    let result;
+    try {
+        result = await userModel.findOne({ _id: id })
+    } catch (error) {
+        console.log(error)
+    }
+
+    return result;
+}
+
 export const createUser = async user => {
     let result;
     try {

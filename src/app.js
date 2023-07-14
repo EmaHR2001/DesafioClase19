@@ -10,9 +10,10 @@ import productsRouter from "./routes/products.routes.js";
 import realTimeRoutes from "./routes/realTime.routes.js";
 import messagesRouter from "./routes/messages.routes.js";
 import sessionRouter from "./routes/session.routes.js";
-
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
+import passport from "passport";
+import initializePassport from "./config/passport.config.js";
 
 const app = express();
 
@@ -26,6 +27,9 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }))
+initializePassport();
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

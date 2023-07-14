@@ -1,36 +1,32 @@
 import { Router } from "express";
-import { createUser, getAll, getByEmail } from '../DAO/sessionDAO.js';
 import { authMiddleware } from "../middlewares/auth.js";
+import passport from "passport";
+
 const sessionRouter = Router();
 
 sessionRouter.get('/register', (req, res) => {
     res.render('register',{})
 })
 
-sessionRouter.post('/register', async (req, res) => {
-    let user = req.body;
-    let userFound = await getByEmail(user.email);
-    if(userFound){
-        res.render('register-error', {})
-    }
-    let result = await createUser(user)
-    console.log(result)
+sessionRouter.post('/register', passport.authenticate('register', {failureRedirect: '/api/session/failregister'}), async (req, res) => {
     res.render('login', {})
+})
+
+sessionRouter.get('/failregister', async (req, res) => {
+    res.render('register-error',{})
 })
 
 sessionRouter.get('/login', (req, res) => {
     res.render('login',{})
 })
 
-sessionRouter.post('/login', async (req, res) => {
-    let user = req.body;
-    let result = await getByEmail(user.email)
-    if(result && user.password !== result.password){
-        res.render('login-error',{})
-    }
-    console.log(result)
-    req.session.user = user.email;
+sessionRouter.post('/login', passport.authenticate('login', {failureRedirect: '/api/session/faillogin'}), async (req, res) => {
+    if(!req.user) return res.render('login-error', {})
     res.redirect('/');
+})
+
+sessionRouter.get('faillogin', (req, res) => {
+    res.render('login-error', {})
 })
 
 sessionRouter.get('/profile', authMiddleware, async (req, res) => {
@@ -52,5 +48,12 @@ sessionRouter.get('/admin', authMiddleware, async (req, res) => {
         res.redirect('/');
     }
 })
+
+sessionRouter.get('/github', passport.authenticate('github', {scope: ['user:email']}), async (req, res) => {})
+
+sessionRouter.get('/githubcallback', passport.authenticate('github', { failureRedirect: '/login' }, async (req, res) => {
+    req.sessions.user = req.user;
+    res.redirect('/');
+}))
 
 export default sessionRouter;
