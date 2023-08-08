@@ -17,13 +17,17 @@ import initializePassport from "./config/passport.config.js";
 
 const app = express();
 
+const config = require('./config');
+
+const dbConfig = config.database;
+
 app.use(session({
     store: MongoStore.create({
-        mongoUrl: 'mongodb+srv://Coder:spiderverse2099@coder.qugttqn.mongodb.net/session?retryWrites=true&w=majority',
+        mongoUrl: dbConfig.mongoDb,
         mongoOptions: { useUnifiedTopology: true },
         ttl: 3600
     }),
-    secret: 'welcometothejungle',
+    secret: dbConfig.secret,
     resave: false,
     saveUninitialized: false
 }))
@@ -57,7 +61,7 @@ const server = app.listen(8080, () =>
 );
 
 mongoose.connect(
-    "mongodb+srv://Coder:spiderverse2099@coder.qugttqn.mongodb.net/ecommerce",
+    dbConfig.mongoose,
     {
         useNewUrlParser: true,
         useUnifiedTopology: true,
