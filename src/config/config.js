@@ -1,9 +1,9 @@
 const dotenv = require('dotenv')
-dotenv.config({path:'src/.env'})
+dotenv.config()
 
 module.exports = {
     port:process.env.PORT || 8080,
     mongoDb: process.env.MONGO_Db,
-    mongoose: process.env-Mongoose,
+    mongoose: process.env.Mongoose,
     secret: process.env.SECRET,
 }
