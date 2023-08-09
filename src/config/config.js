@@ -3,7 +3,7 @@ dotenv.config()
 
 module.exports = {
     port:process.env.PORT || 8080,
-    mongoDb: process.env.MONGO_Db,
-    mongoose: process.env.Mongoose,
+    mongoDb: process.env.MONGO_DB,
+    mongoose: process.env.MONGOOSE,
     secret: process.env.SECRET,
 }
