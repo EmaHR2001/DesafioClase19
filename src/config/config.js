@@ -1,7 +1,7 @@
-const dotenv = require('dotenv')
-dotenv.config()
+import dotenv from 'dotenv';
+dotenv.config();
 
-module.exports = {
+export default {
     port:process.env.PORT || 8080,
     mongoDb: process.env.MONGO_DB,
     mongoose: process.env.MONGOOSE,

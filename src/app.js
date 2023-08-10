@@ -14,20 +14,17 @@ import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import passport from "passport";
 import initializePassport from "./config/passport.config.js";
+import config from './config/config.js';
 
 const app = express();
 
-const config = require('./config');
-
-const dbConfig = config.database;
-
 app.use(session({
     store: MongoStore.create({
-        mongoUrl: dbConfig.mongoDb,
+        mongoUrl: config.mongoDb,
         mongoOptions: { useUnifiedTopology: true },
         ttl: 3600
     }),
-    secret: dbConfig.secret,
+    secret: config.secret,
     resave: false,
     saveUninitialized: false
 }))
@@ -61,7 +58,7 @@ const server = app.listen(8080, () =>
 );
 
 mongoose.connect(
-    dbConfig.mongoose,
+    config.mongoose,
     {
         useNewUrlParser: true,
         useUnifiedTopology: true,
