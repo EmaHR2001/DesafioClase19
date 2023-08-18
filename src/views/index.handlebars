@@ -1,42 +1,9 @@
-<div>
-    <div class="welcome">
-        {{#if firstName}}
-            <h1>Bienvenido {{ firstName }}</h1>
-        {{else}}
-            <h1>Sesión no iniciada.</h1>
-        {{/if}}
-    </div>
-    <h2 class="text-center mt-4">Lista de Productos</h2>
-    <section class="p-5">
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Title</th>
-                    <th>Description</th>
-                    <th>Category</th>
-                    <th>Price</th>
-                    <th>Code</th>
-                    <th>Stock</th>
-                    <th>Status</th>
-                    <th>Thumbnails</th>
-                </tr>
-            </thead>
-            <tbody>
-                {{#each products}}
-                <tr>
-                    <td>{{this.id}}</td>
-                    <td>{{this.title}}</td>
-                    <td>{{this.description}}</td>
-                    <td>{{this.category}}</td>
-                    <td>{{this.price}}</td>
-                    <td>{{this.code}}</td>
-                    <td>{{this.stock}}</td>
-                    <td>{{this.status}}</td>
-                    <td>{{this.thumbnails}}</td>
-                </tr>
-                {{/each}}
-            </tbody>
-        </table>
-    </section>
+
+<div class="box">
+        <h4>{{message}}</h4>
+        <h6><strong>Prueba con las siguientes rutas:</strong></h6>
+        <a class="link" href="http://localhost:8080/products" target="_blank">Products</a>
+        <a class="link" href="http://localhost:8080/realTimeProducts" target="_blank">Real Time Products</a>
+        <a class="link" href="http://localhost:8080/chat" target="_blank">Chats</a>
+        <a class="link" href="http://localhost:8080/cart" target="_blank">Cart</a>
 </div>

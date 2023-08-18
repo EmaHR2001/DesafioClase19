@@ -1,77 +1,130 @@
-import passport from "passport";
-import GithubStrategy from 'passport-github2'
-import local from "passport-local"
-import { createUser, getAll, getByEmail, getById } from '../DAO/sessionDAO.js';
-import { createHash, isValidPassword } from "../utils/index.js"
-
-const LocalStrategy = local.Strategy
+const passport = require('passport')
+const LocalStrategy = require('passport-local').Strategy
+const gitHubStrategy = require('passport-github2').Strategy
+const User = require('../dao/mongo/models/users.model')
+const Service = require('../dao/mongo/services/cart.services')
+const {createHash, isValidPass} = require ('../utils/bcrypt')
+const { githubClientId, githubSecret, githubCallBack} = require('../config/env.config')
+const fetch = require('node-fetch')
+const cartService= new Service()
 
 const initializePassport = () => {
-    passport.use('register', new LocalStrategy(
-        { passReqToCallback: true, usernameField: 'email' }, async (req, username, password, done) => {
-            try {
-                let user = req.body;
-                let userFound = await getByEmail(user.email);
-                if (userFound) {
-                    return done(null, false)
-                }
-                user.password = createHash(user.password)
-                let result = await createUser(user)
-                console.log(result)
-                return done(null, result)
-            } catch (error) {
-                return done('Error al registrar: ' + error)
+
+    passport.use('login-passport', 
+    new LocalStrategy(
+        {passReqToCallback:true, usernameField:'email'}, 
+        async (req, username, password, done)=>{
+            try{
+                let userFound = await User.findOne({email:username})
+                if (!userFound) {
+                    console.log('User Not Found with username (email) ' + username);
+                    return done(null, false);
+                  }
+                  if (!isValidPass(password, userFound.password)) {
+                    console.log('Invalid Password');
+                    return done(null, false);
+                  }
+
+                  return done(null, userFound);
             }
-        }
-    ));
-
-    passport.use('login', new LocalStrategy({ usernameField: 'email' }, async (username, password, done) => {
-        let result = await getByEmail(username)
-        console.log(result)
-        if (!username || !isValidPassword(result, password)) {
-            return done(null, false)
-        }
-        delete result.password;
-        return done(null, result)
-    }))
-
-    passport.use('github', new GithubStrategy({
-        clientID: 'Iv1.5a597d7f2ad5851a',
-        callbackURL: 'https://localhost:8080/api/session/githubcallback',
-        clientSecret: 'a3d7b685cae33ecd592ddef645500c832826cbee',
-        scope: 'user:email'
-    }, async (accessToken, refreshToken, profile, done) => {
-        try {
-            console.log(profile)
-            let userEmail = profileEmails[0].value
-            let user = await getByEmail(userEmail)
-            if (!user) {
-                let newUser = {
-                    first_name: profile._json.login,
-                    last_name: "",
-                    email: userEmail,
-                    password: "",
-                    age: 20,
-                    role: "usuario"
+            catch (err){
+                return done(err);
+            }
+        })
+    ),
+    passport.use('register-passport', 
+    new LocalStrategy(
+        {passReqToCallback:true, usernameField:'email'},
+        async (req, username, password,done) => {
+            try{
+                let data={}
+                let newCart = await cartService.postCart(data) 
+             
+                let userData = req.body
+                let userFound = await User.findOne({email:username})
+                if(userFound){
+                    console.log('User already exists')
+                    done(null,false)
                 }
-                let result = await createUser(newUser);
+                let userNew = {
+                    first_name: userData.first_name,
+                    last_name:userData.last_name || 'no-last-name',
+                    email:userData.email,
+                    age: userData.age || 25,
+                    password:createHash(userData.password),
+                    rol: 'User',
+                    cart:{_id:newCart._id}
+                } 
+                let result = await User.create(userNew)
                 done(null, result)
-            } else {
-                done(null, user)
             }
-        } catch {
-            done(error)
-        }
-    }))
+            catch (err){
+                return done('Error creating user' + err)
+            }
+        })
+    ),
+    passport.use('auth-github', new gitHubStrategy(
+        {
+            clientID: 'a3cde9aa35b565bcd7d5', 
+            clientSecret:  '149eb634fd0a894d1486453f1f6578e97b50219d',
+            callbackURL: 'http://localhost:8080/auth/github/callback'
+        },
+        async (accessToken, refreshToken, profile, done)=>{
+            try{
+                const res = await fetch('https://api.github.com/user/emails', {
+                headers: {
+                    Accept: 'application/vnd.github+json',
+                    Authorization: 'Bearer ' + accessToken,
+                    'X-Github-Api-Version': '2022-11-28',
+                },
+                });
+                
+                const emails = await res.json();
+                const emailDetail = emails.find((email) => email.verified == true);
 
-    passport.serializeUser((user, done) => {
-        done(null, user._id)
-    });
-
-    passport.deserializeUser(async (id, done) => {
-        let user = await getById(id);
-        done(null, user);
+                if (!emailDetail) {
+                    return done(new Error('cannot get a valid email for this user'));
+                }
+                
+                let data={}
+                let newCart = await cartService.postCart(data) 
+                profile.email = emailDetail.email;
+                let user = await User.findOne({ email: profile.email });
+                
+                if (!user) {
+                    const newUser = {
+                    first_name: profile._json.name || profile._json.login || 'noname',
+                    last_name: profile._json.name || profile._json.login || 'no-last-name',
+                    email:profile.email,
+                    age: 18,
+                    password:createHash('123'), 
+                    rol: 'User',
+                    cart: {_id:newCart._id}
+                    };
+                    let userCreated = await User.create(newUser);
+                    console.log('User Registration succesful');
+                    return done(null, userCreated);
+                } else {
+                console.log('User already exists');
+                console.log('Esto client id es de github :' + githubClientId,' secret git :' + githubSecret)
+                return done(null, user);
+                }
+            }
+            catch(err) {
+                console.log('Error en auth github');
+                console.log(err);
+                return done(err);
+                }
+            }
+        )
+    ),
+    passport.serializeUser((user,done)=>{
+        done(null,user._id)
+    }),
+    passport.deserializeUser(async (id,done)=>{
+        let user= await User.findById(id)
+        done(null,user)
     })
 }
 
-export default initializePassport;
+module.exports =  initializePassport

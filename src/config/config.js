@@ -1,9 +1,11 @@
-import dotenv from 'dotenv';
-dotenv.config();
+// require('dotenv').config({path:'src/.env'})
+const dotenv = require('dotenv')
+dotenv.config({path:'src/.env'})
 
-export default {
+module.exports = {
     port:process.env.PORT || 8080,
-    mongoDb: process.env.MONGO_DB,
-    mongoose: process.env.MONGOOSE,
-    secret: process.env.SECRET,
+    mongoUrl: process.env.MONGO_URL,
+    secret: process.env.SECRET, 
+    CLIENT_ID: process.env.CLIENT_ID,
+    CLIENT_SECRET: process.env.CLIENT_SECRET,
 }
