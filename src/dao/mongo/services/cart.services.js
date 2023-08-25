@@ -17,7 +17,7 @@ class CartServices {
     console.log(data.date);
     const cart = await Cart.create(data);
     return cart;
-  } 
+  }
   async deleteProducts(_id) {
     const cart = await Cart.findOne({ _id: _id });
     let arr = [];

@@ -1,17 +1,14 @@
-// Index del cliente!!!!
-console.log('Hola soy el cliente')
-
 const socket= io()
-// le indicamos el evento que queremos que escuche, esto viene del socket.emit del back
+
 socket.on('wellcome', (data)=> {
-    console.log(data) // data seria el msj que pasamos como segudo argumento en el socket.emit del back
+    console.log(data)
 })
-// socket para escuchar messages-all
+
 socket.on('messages-all', (data)=>{
     render(data)
 
 })
-// creamos una funcion para renderizar los msjs
+
 function render(data) {
     const html = data.map(element=>{
         return (`

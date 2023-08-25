@@ -20,7 +20,6 @@ const ProductSchema = new mongoose.Schema({
     },
     thumbnail:{
         type:String,
-        // default:"https://via.placeholder.com/180x180",
         unique:false,
         required:true,
     },

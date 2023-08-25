@@ -35,10 +35,6 @@ module.exports = {
   getRealTimeProducts,
   getRealTimeError
 }
-
-
-
-// router.get("/", isAdmin, (req, res) => {
 //   let session = req.session.user
 //   let rol = req.session.user.rol 
 //   Product.find({})

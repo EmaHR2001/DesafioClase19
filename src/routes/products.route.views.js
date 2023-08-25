@@ -7,7 +7,3 @@ productViews.get("/", getProductsViews);
 productViews.get("*", getProductsViewsError);
 
 module.exports = productViews;
-
-
-// const ProductServices = require("../dao/mongo/services/products.services");
-// const Service = new ProductServices();
