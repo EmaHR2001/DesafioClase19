@@ -6,7 +6,7 @@ const getProducts = async (req, res) => {
   const { page, limit } = req.query;
   try {
     const dataproduct = await Service.getAll(page, limit);
-    
+
     return res.status(200).json({
       status: "success",
       payload: dataproduct.docs,
@@ -22,7 +22,7 @@ const getProducts = async (req, res) => {
       nextLink: dataproduct.hasNextPage
         ? `http://localhost:8080/dataproduct/?page=${dataproduct.nextPage} `
         : null,
-      
+
     });
   } catch (e) {
     console.log(e);
@@ -39,15 +39,15 @@ const getProductsById = async (req, res) => {
     const product = await Service.getById(id);
     return product
       ? res.status(200).json({
-          status: "success",
-          msg: "Product Get by ID",
-          data: product,
-        })
+        status: "success",
+        msg: "Product Get by ID",
+        data: product,
+      })
       : res.status(200).json({
-          status: "error",
-          msg: "Product not found",
-          data: product,
-        });
+        status: "error",
+        msg: "Product not found",
+        data: product,
+      });
   } catch (e) {
     console.log(e);
     return res.status(500).json({
@@ -75,6 +75,7 @@ const postProduct = async (req, res) => {
     });
   }
 }
+
 const postManyProducts = async (req, res) => {
   try {
     const data = req.body;
@@ -114,8 +115,7 @@ const delProductById = async (req, res) => {
 const putProductById = async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, description, thumbnail, code, stock, category, status } =
-      req.body;
+    const { title, description, thumbnail, code, stock, category, status } = req.body;
     const data = req.body;
     await Service.updateOne(
       id,
@@ -147,7 +147,7 @@ const getProductError = () => {
     title: "Error 404",
   });
 }
- 
+
 module.exports = {
   getProducts,
   getProductsById,

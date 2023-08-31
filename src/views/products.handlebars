@@ -11,7 +11,7 @@
                     
                 </div>
                 <div class="card-body">
-                <button id="{{this._id}}" class="btn btn-primary">Add to Cart</button>
+                <button id="{{this._id}}" class="btn btn-primary add-product">Add to Cart</button>
                 </div>
             </div>
       {{/each}}
@@ -45,3 +45,32 @@
 
     </div> 
 </div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    var cartId = '{{ User.cart }}';
+    console.log(cartId)
+    
+    // Agregar evento click a los botones de clase "add-product"
+    var addProductButtons = document.querySelectorAll(".add-product");
+    addProductButtons.forEach(function (button) {
+      button.addEventListener("click", function () {
+        var productId = button.id; // Obtener el _id del botón clickeado
+        // Realizar solicitud POST a la API
+        fetch(`/api/cart/${cartId}/product/${productId}`, {
+          method: "POST",
+          // Otras opciones de configuración si es necesario
+        })
+        .then(response => response.json())
+        .then(data => {
+          // Manejar la respuesta de la solicitud POST si es necesario
+          console.log("Solicitud POST exitosa:", data);
+        })
+        .catch(error => {
+          // Manejar errores de la solicitud POST
+          console.error("Error en la solicitud POST:", error);
+        });
+      });
+    });
+  });
+</script>
