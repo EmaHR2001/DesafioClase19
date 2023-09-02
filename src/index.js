@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express()
 const { port, mongoUrl, secret } = require('./config/env.config')
+const errorHandler = require ('./controller/middlewares/errors/index')
 
 //Mongo
 const DataBase = require('./dao/mongo/db')
@@ -50,6 +51,8 @@ app.use('/cart', viewsCart)
 // Users
 const routesUsers = require('./routes/user.route')
 app.use('/api/user', routesUsers)
+const viewAdmins = require('./routes/admin.route.view')
+app.use('/api/admin', viewAdmins)
 // Sessions
 const sessions = require('./routes/sessions.route')
 app.use('/session', sessions)
@@ -68,6 +71,7 @@ app.use('/chat', routesChat)
 const routesMock = require('./routes/mock.route')
 app.use('/mockingproducts', routesMock)
 
+app.use(errorHandler)
 
 // Handlebars
 const handlebars = require('express-handlebars')

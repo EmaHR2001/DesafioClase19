@@ -1,6 +1,12 @@
-const EErrors = {
-    INVALID_TYPES: 1,
-    INVALID_PARAM: 2
+const Errors = {
+    CART_UPDATE_ERROR: 1,
+    GET_CART_ERROR: 2,
+    ADD_PRODUCT_ERROR: 3,
+    DEL_PRODUCT_ERROR: 4,
+    UPDATE_PRODUCT_ERROR: 5,
+    EMPTY_CART_ERROR: 6,
+    DEL_PRODUCT_CART_ERROR: 7,
+    GET_PRODUCT_ERROR: 8
 }
 
-module.exports = { EErrors }
+module.exports = { Errors }

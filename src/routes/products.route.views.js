@@ -3,7 +3,6 @@ const {getProductsViews, getProductsViewsError} = require ('../controller/produc
 const productViews = express.Router();
 
 productViews.get("/", getProductsViews);
-
 productViews.get("*", getProductsViewsError);
 
 module.exports = productViews;

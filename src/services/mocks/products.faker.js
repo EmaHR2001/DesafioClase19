@@ -1,21 +1,25 @@
-const faker = require("@faker-js/faker");
-
-module.exports.generateProducts = (cant) => {
-    return {
-        id: faker.database.mongodbObjectId(),
-        nombre: faker.person.firstName(),
-        apellido: faker.person.lastName(),
-        nacimiento: faker.date.birthdate(),
-        telefono: faker.phone.number()
-    }
-}
+const { faker } = require("@faker-js/faker");
 
 const generateProduct = () => {
     return {
-        _id: faker.en.string,
-        title: faker.en.commerce
+        _id: faker.database.mongodbObjectId(),
+        title: faker.commerce.product(),
+        description: faker.commerce.productDescription(),
+        code: faker.string.alpha(4),
+        price: faker.commerce.price({ min: 100, max: 99999, dec: 0 }),
+        stock: faker.string.numeric({length: {min:1, max: 5}, exclude: [`0`]}),
+        category: faker.commerce.department(),
+        thumbnail: faker.image.urlLoremFlickr({category: `product`})
+    };
+};
+
+module.exports.generateProducts = (cant) => {
+    const products = [];
+    for (let i = 0; i < cant; i++) {
+        products.push(generateProduct());
     }
-}
+    return products;
+};
 
 /* 
 

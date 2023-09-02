@@ -1,6 +1,6 @@
 const express = require('express')
 const { isUser, isAdmin } = require("../controller/middlewares/auth.middleware");
-const { getCart, postCart, getCartById, postCartProductsById, delCartById, delCartProductById, putCartById, putCartProductsById, getCartError,purchase} = require ('../controller/cart.controller')
+const { getCart, postCart, getCartById, postCartProductsById, delCartById, delCartProductById, putCartById, putCartProductsById, getCartErrorRender,purchase} = require ('../controller/cart.controller')
 const { Router } = express
 const router = new Router()
 
@@ -17,6 +17,6 @@ router.put('/:cId', isAdmin, putCartById)
 router.put('/:cId/product/:pId', isAdmin, putCartProductsById)
 
 router.post('/purchase', purchase)
-router.get('*', getCartError)
+router.get('*', getCartErrorRender)
 
 module.exports = router

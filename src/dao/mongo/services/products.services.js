@@ -1,7 +1,5 @@
 const Product = require("../models/products.model");
 
-// Agregar metodo getAllproduct solo con un Product.find()
-
 class ProductServices {
 
   async getAllProducts() {

@@ -1,0 +1,218 @@
+<br><br>
+<div class="container">
+  <h3>Panel de Administración</h3>
+</div>
+<div class="m-5">
+  <button id="showForm1" class="btn btn-primary btn-lg">Agregar Producto</button>
+  <button id="showForm2" class="btn btn-primary btn-lg">Actualizar Producto</button>
+  <button id="showForm3" class="btn btn-primary btn-lg">Eliminar Producto</button>
+</div>
+
+<div id="form1" style="display: none;">
+  <form class="m-5" action="/api/product/" method="post">
+
+    <div class="form-group row">
+      <label for="" class="col-sm-2 col-form-label">Title</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" name="title" placeholder="Title" required>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="" class="col-sm-2 col-form-label">Description</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" name="description" placeholder="Description" required>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="" class="col-sm-2 col-form-label">Price</label>
+      <div class="col-sm-10">
+        <input type="number" class="form-control" name="price" placeholder="Price" required>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="" class="col-sm-2 col-form-label">Stock</label>
+      <div class="col-sm-10">
+        <input type="number" class="form-control" name="stock" placeholder="Stock" required>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="" class="col-sm-2 col-form-label">Code</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" name="code" placeholder="Code" required>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="" class="col-sm-2 col-form-label">Category</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" name="category" placeholder="Category" required>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="" class="col-sm-2 col-form-label">Thumbnail</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" name="thumbnail" placeholder="Thumbnail">
+      </div>
+    </div>
+    <br>
+
+    <button type="submit" class="btn btn-primary">Send</button>
+  </form>
+</div>
+
+<div id="form2" style="display: none;" class="mx-auto">
+  <form method="post" action="/api/product/" id="updateProductForm">
+
+    <div class="form-group row">
+      <label for="productId" class="col-sm-2 col-form-label">ID del Producto:</label>
+      <div class="col-sm-10">
+        <input type="text" id="productId" name="productId" placeholder="ID del producto" required>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="" class="col-sm-2 col-form-label">Title</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" name="title" placeholder="Title">
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="" class="col-sm-2 col-form-label">Description</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" name="description" placeholder="Description">
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="" class="col-sm-2 col-form-label">Price</label>
+      <div class="col-sm-10">
+        <input type="number" class="form-control" name="price" placeholder="Price">
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="" class="col-sm-2 col-form-label">Stock</label>
+      <div class="col-sm-10">
+        <input type="number" class="form-control" name="stock" placeholder="Stock">
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="" class="col-sm-2 col-form-label">Code</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" name="code" placeholder="Code">
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="" class="col-sm-2 col-form-label">Category</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" name="category" placeholder="Category">
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="" class="col-sm-2 col-form-label">Thumbnail</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" name="thumbnail" placeholder="Thumbnail">
+      </div>
+    </div>
+    <br>
+
+    <button id="submitButton" class="btn btn-primary">Send</button>
+  </form>
+</div>
+
+<div id="form3" style="display: none;" class="mx-auto">
+  <h1>Eliminar Producto</h1>
+  <p class="cart">Elimine un producto insertando el id correspondiente mostrado en la lista de abajo.</p>
+  <form id="deleteProductForm">
+    <label for="delId">ID del Producto:</label>
+    <input type="text" id="delId" name="delId" placeholder="ID del producto" required>
+    <button type="submit">Eliminar Producto</button>
+  </form>
+</div>
+
+<h2 class="m-2">Lista</h2>
+<div>
+  {{#each products}}
+  <p class="m-2">{{title}} ID: {{_id}}</p>
+  {{/each}}
+</div>
+
+<script>
+  const showForm1Button = document.getElementById('showForm1');
+  const showForm2Button = document.getElementById('showForm2');
+  const showForm3Button = document.getElementById('showForm3');
+  const form1 = document.getElementById('form1');
+  const form2 = document.getElementById('form2');
+  const form3 = document.getElementById('form3');
+
+  showForm1Button.addEventListener('click', () => {
+    form1.style.display = 'block';
+    form2.style.display = 'none';
+    form3.style.display = 'none';
+  });
+
+  showForm2Button.addEventListener('click', () => {
+    form1.style.display = 'none';
+    form2.style.display = 'block';
+    form3.style.display = 'none';
+  });
+
+  showForm3Button.addEventListener('click', () => {
+    form1.style.display = 'none';
+    form2.style.display = 'none';
+    form3.style.display = 'block';
+  });
+
+
+  const productIdInput = document.getElementById("productId");
+  const form = document.getElementById("updateProductForm");
+  const submitButton = document.getElementById("submitButton");
+
+  // Escuchar cambios en el campo de entrada de texto
+  submitButton.addEventListener("click", function (event) {
+    event.preventDefault();
+    const productId = productIdInput.value;
+    const action = `/api/product/${productId}`;
+    // Actualizar la acción del formulario con la nueva URL
+    form.action = action;
+    form.submit();
+  });
+
+  const deleteProductForm = document.getElementById("deleteProductForm");
+
+  deleteProductForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const delId = document.getElementById("delId").value;
+    const confirmation = confirm("¿Estás seguro de que deseas eliminar este producto?");
+
+    if (confirmation) {
+      try {
+        const response = await fetch(`/api/product/${delId}`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (response.ok) {
+          alert("Producto eliminado exitosamente.");
+          // Puedes redirigir al usuario a otra página o realizar otras acciones aquí
+        } else {
+          alert("Error al eliminar el producto.");
+        }
+      } catch (error) {
+        console.error("Error al eliminar el producto:", error);
+      }
+    }
+  });
+</script>

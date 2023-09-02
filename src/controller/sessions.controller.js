@@ -2,8 +2,6 @@
 const UserServices = require("../dao/mongo/services/users.services");
 const Service = new UserServices();
 
-
-
 const sessionGetRegister = (req, res) => {
   res.status(200).render("register", {
     style: "register.css",
@@ -20,7 +18,7 @@ const sessionPostRegister = (req, res) => {
     first_name: req.user.first_name,
     last_name: req.user.last_name,
     rol: req.user.rol,
-    cart:req.user.cart._id 
+    cart: req.user.cart._id
   };
   console.log(req.session.user)
   return res.redirect("/products");
@@ -41,21 +39,21 @@ const sessionPostLogin = (req, res) => {
     first_name: req.user.first_name,
     last_name: req.user.last_name,
     rol: req.user.rol,
-    cart:req.user.cart._id
+    cart: req.user.cart._id
   };
   return res.redirect("/session/profile");
 }
 const sessionGetProfile = (req, res) => {
-    let session = req.session.user
-    let rol = req.session.user.rol 
-    console.log(req.session.user)  
-    const data={
-        title:'Profile',
-        style:'profile.css',
-        data:session
-    }
-    data[rol]= session
-    res.render('profile', data) 
+  let session = req.session.user
+  let rol = req.session.user.rol
+  console.log(req.session.user)
+  const data = {
+    title: 'Profile',
+    style: 'profile.css',
+    data: session
+  }
+  data[rol] = session
+  res.render('profile', data)
 }
 const sessionGetLogout = (req, res) => {
   req.session.destroy((err) => {
@@ -66,13 +64,13 @@ const sessionGetLogout = (req, res) => {
 const sessionGetFailedRegister = (req, res) => {
   res.send("failed user registration");
 }
-const sessionGetError = (req,res)=> {
-  res.render('error404',{
-      style:'error404.css',
-      title:'Error 404'
-     })
+const sessionGetError = (req, res) => {
+  res.render('error404', {
+    style: 'error404.css',
+    title: 'Error 404'
+  })
 }
- 
+
 
 module.exports = {
   sessionGetRegister,
@@ -82,7 +80,7 @@ module.exports = {
   sessionGetProfile,
   sessionGetLogout,
   sessionGetFailedRegister,
-  sessionGetError 
+  sessionGetError
 };
 
 
@@ -140,15 +138,15 @@ module.exports = {
 
 // router.get("/profile", (req, res) => {
 //   let session = req.session.user
-//     let rol = req.session.user.rol 
-//     console.log(req.session.user)  
+//     let rol = req.session.user.rol
+//     console.log(req.session.user)
 //         const data={
 //             title:'Profile',
 //             style:'profile.css',
 //             data:session
 //         }
 //         data[rol]= session
-//         res.render('profile', data) 
+//         res.render('profile', data)
 // });
 // router.get("/logout", (req, res) => {
 //   req.session.destroy((err) => {

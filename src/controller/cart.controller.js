@@ -1,5 +1,8 @@
 
 const Cart = require('../dao/mongo/models/cart.model')
+const { CustomError } = require('../services/errors/customErrors')
+const EErrors = require('../services/errors/enums')
+const { idProductCartError, getCartError } = require('../services/errors/info')
 
 const CartService = require('../dao/mongo/services/cart.services')
 const cartService = new CartService()
@@ -87,10 +90,16 @@ const postCartProductsById = (req, res) => {
                         )
                     })
                     .catch(err => {
+                        const error = CustomError.createError({
+                            name: 'Error al actualizar carrito',
+                            cause: idProductCartError,
+                            message: 'Error al intentar actualizar el carrito',
+                            code: EErrors.ADD_PRODUCT_ERROR
+                        });
                         res.status(500).send({
                             status: 'error',
-                            msg: 'something went wrong :(',
-                            data: {},
+                            msg: error.name,
+                            cause: error.cause
                         })
                     })
             }
@@ -107,20 +116,32 @@ const postCartProductsById = (req, res) => {
                         )
                     })
                     .catch(err => {
+                        const error = CustomError.createError({
+                            name: 'Error al actualizar carrito',
+                            cause: idProductCartError,
+                            message: 'Error al intentar actualizar el carrito',
+                            code: EErrors.ADD_PRODUCT_ERROR
+                        });
                         res.status(500).send({
                             status: 'error',
-                            msg: 'something went wrong :(',
-                            data: {},
-                        })
+                            msg: error.name,
+                            cause: error.cause
+                        });
                     })
             }
         })
         .catch(err => {
+            const error = CustomError.createError({
+                name: 'Error al obtener carrito',
+                cause: getCartError,
+                message: 'Error al intentar obtener el carrito',
+                code: EErrors.CART_GET_ERROR
+            });
             res.status(500).send({
                 status: 'error',
-                msg: 'something went wrong :(',
-                data: {},
-            })
+                msg: error.name,
+                cause: error.cause
+            });
         })
 }
 const delCartById = async (req, res) => {
@@ -136,8 +157,14 @@ const delCartById = async (req, res) => {
             )
         })
         .catch(err => {
+            const error = CustomError.createError({
+                name: 'Error al obtener carrito.',
+                cause: getCartError,
+                message: 'Error al buscar carrito.',
+                code: EErrors.EMPTY_CART_ERROR
+            });
             res.status(500).send(
-                console.log('Error empty Cart')
+                console.log('Carrito no encontrado.')
             )
         })
 }
@@ -307,7 +334,7 @@ const purchase = (req, res) => {
 }
 
 
-const getCartError = (req, res) => {
+const getCartErrorRender = (req, res) => {
     res.render('error404', {
         style: 'error404.css',
         title: 'Error 404'
@@ -326,6 +353,6 @@ module.exports = {
     delCartProductById,
     putCartById,
     putCartProductsById,
-    getCartError,
+    getCartErrorRender,
     purchase
 }

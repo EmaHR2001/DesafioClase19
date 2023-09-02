@@ -45,12 +45,13 @@ const getProductsViews = async (req, res) => {
       links: links,
       style: "products.css",
       title: "Products",
-     
+    
     });
 
   }
 
 }
+
 const getProductsViewsError = (req, res) => {
   res.render("error404", {
     style: "error404.css",

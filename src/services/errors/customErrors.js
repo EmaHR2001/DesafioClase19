@@ -5,7 +5,7 @@ class CustomError {
         error.cause = cause;
         error.name = name;
         error.code = code;
-        console.error(error);  
+        console.error(error);
         throw error; 
     }
 }
