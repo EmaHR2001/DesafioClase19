@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express()
 const { port, mongoUrl, secret } = require('./config/env.config')
-const errorHandler = require ('./controller/middlewares/errors/index')
+const errorHandlerMiddleware = require ('./controller/middlewares/errors/index')
 
 //Mongo
 const DataBase = require('./dao/mongo/db')
@@ -71,7 +71,7 @@ app.use('/chat', routesChat)
 const routesMock = require('./routes/mock.route')
 app.use('/mockingproducts', routesMock)
 
-app.use(errorHandler)
+app.use(errorHandlerMiddleware)
 
 // Handlebars
 const handlebars = require('express-handlebars')

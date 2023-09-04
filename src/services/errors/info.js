@@ -28,4 +28,8 @@ const updateProductError = (id) => {
     return `No se a encontrado el producto a actualizar. Verifique el id enviado. ID enviado: ${id}.`
 }
 
-module.exports = { addProductCartError, getCartError, addProductErrorInfo, delProductError, updateProductError, idProductCartError }
+const validIdError = (id) => {
+    return `El ID: ${id}. Resulta ser invalido. Por favor vuelva a intentar con un valor valido.`
+}
+
+module.exports = { addProductCartError, getCartError, addProductErrorInfo, delProductError, updateProductError, idProductCartError, validIdError }

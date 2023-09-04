@@ -1,8 +1,9 @@
 const ProductServices = require("../dao/mongo/services/products.services");
 const Service = new ProductServices();
 const { CustomError } = require('../services/errors/customErrors')
-const EErrors = require('../services/errors/enums')
-const { addProductErrorInfo, delProductError, updateProductError } = require('../services/errors/info')
+const { Errors } = require('../services/errors/enums')
+const mongoose = require('mongoose');
+const { addProductErrorInfo, delProductError, updateProductError, validIdError } = require('../services/errors/info')
 
 
 const getProducts = async (req, res) => {
@@ -74,7 +75,7 @@ const postProduct = async (req, res) => {
       name: 'Error al crear producto.',
       cause: addProductErrorInfo(data),
       message: 'Error al intentar crear producto.',
-      code: EErrors.ADD_PRODUCT_ERROR
+      code: Errors.ADD_PRODUCT_ERROR
     });
   }
 }
@@ -97,29 +98,63 @@ const postManyProducts = async (req, res) => {
   }
 }
 const delProductById = async (req, res) => {
-  console.log("codigo:", EErrors.DEL_PRODUCT_ERROR)
+  const { id } = req.params;
+  
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    const customError = CustomError.createError({
+      name: 'Id Invalido.',
+      cause: validIdError(id),
+      message: 'Id Invalido.',
+      code: Errors.ID_INVALID
+    });
+    return res.status(400).json({
+      status: "error",
+      error: "Error deleting product",
+      details: customError.message,
+    });
+  }
+
   try {
-    const { id } = req.params;
     await Service.deletedOne(id);
     return res.status(200).json({
       status: "success",
       msg: "Product deleted",
       data: {},
     });
-  } catch (e) {
-    const { id } = req.params
-    const error = CustomError.createError({
+  } catch (error) {
+    // Manejar errores y enviar una respuesta de error
+    const customError = CustomError.createError({
       name: 'Error al eliminar producto.',
       cause: delProductError(id),
       message: 'Error al intentar eliminar producto.',
-      code: EErrors.DEL_PRODUCT_ERROR
+      code: Errors.DEL_PRODUCT_ERROR
+    });
+    
+    return res.status(500).json({
+      status: "error",
+      error: "Error deleting product",
+      details: customError.message,
     });
   }
-}
+};
 const putProductById = async (req, res) => {
+  const { id } = req.params;
+  const data = req.body;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    const customError = CustomError.createError({
+      name: 'Id Invalido.',
+      cause: validIdError(id),
+      message: 'Id Invalido.',
+      code: Errors.ID_INVALID
+    });
+    return res.status(400).json({
+      status: "error",
+      error: "Error deleting product",
+      details: customError.message,
+    });
+  }
   try {
-    const { id } = req.params;
-    const data = req.body;
 
     const existingProduct = await Service.getById(id);
 
@@ -128,7 +163,7 @@ const putProductById = async (req, res) => {
         name: 'Error al buscar en la base producto.',
         cause: updateProductError(id),
         message: 'Error al buscar en la base producto.',
-        code: EErrors.UPDATE_PRODUCT_ERROR
+        code: Errors.UPDATE_PRODUCT_ERROR
       });
     }
     const fieldsToUpdate = ["title", "description", "thumbnail", "price", "code", "stock", "category", "status"];
@@ -146,12 +181,11 @@ const putProductById = async (req, res) => {
       data: existingProduct,
     });
   } catch (e) {
-    const { id } = req.params
     const error = CustomError.createError({
       name: 'Error al intentar actualizar producto.',
       cause: updateProductError(id),
       message: 'Error al intentar actualizar producto.',
-      code: EErrors.UPDATE_PRODUCT_ERROR
+      code: Errors.UPDATE_PRODUCT_ERROR
     });
   }
 }
@@ -162,6 +196,17 @@ const getProductError = () => {
   });
 }
 
+const prueba = () => {
+  const id = "123";
+
+  const error = CustomError.createError({
+    name: 'Error al buscar en la base producto.',
+    cause: updateProductError(id), // Utiliza el ObjectId en lugar de la cadena
+    message: 'Error al buscar en la base producto.',
+    code: Errors.UPDATE_PRODUCT_ERROR
+  });
+}
+
 module.exports = {
   getProducts,
   getProductsById,
@@ -169,5 +214,6 @@ module.exports = {
   postManyProducts,
   delProductById,
   putProductById,
-  getProductError
+  getProductError,
+  prueba
 }

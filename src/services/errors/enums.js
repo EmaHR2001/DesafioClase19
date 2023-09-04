@@ -6,7 +6,8 @@ const Errors = {
     UPDATE_PRODUCT_ERROR: 5,
     EMPTY_CART_ERROR: 6,
     DEL_PRODUCT_CART_ERROR: 7,
-    GET_PRODUCT_ERROR: 8
+    GET_PRODUCT_ERROR: 8,
+    ID_INVALID: 9
 }
 
 module.exports = { Errors }

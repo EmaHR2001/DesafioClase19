@@ -1,7 +1,7 @@
 
 const Cart = require('../dao/mongo/models/cart.model')
 const { CustomError } = require('../services/errors/customErrors')
-const EErrors = require('../services/errors/enums')
+const { Errors } = require('../services/errors/enums')
 const { idProductCartError, getCartError } = require('../services/errors/info')
 
 const CartService = require('../dao/mongo/services/cart.services')
@@ -94,7 +94,7 @@ const postCartProductsById = (req, res) => {
                             name: 'Error al actualizar carrito',
                             cause: idProductCartError,
                             message: 'Error al intentar actualizar el carrito',
-                            code: EErrors.ADD_PRODUCT_ERROR
+                            code: Errors.ADD_PRODUCT_ERROR
                         });
                         res.status(500).send({
                             status: 'error',
@@ -120,7 +120,7 @@ const postCartProductsById = (req, res) => {
                             name: 'Error al actualizar carrito',
                             cause: idProductCartError,
                             message: 'Error al intentar actualizar el carrito',
-                            code: EErrors.ADD_PRODUCT_ERROR
+                            code: Errors.ADD_PRODUCT_ERROR
                         });
                         res.status(500).send({
                             status: 'error',
@@ -135,7 +135,7 @@ const postCartProductsById = (req, res) => {
                 name: 'Error al obtener carrito',
                 cause: getCartError,
                 message: 'Error al intentar obtener el carrito',
-                code: EErrors.CART_GET_ERROR
+                code: Errors.CART_GET_ERROR
             });
             res.status(500).send({
                 status: 'error',
@@ -161,7 +161,7 @@ const delCartById = async (req, res) => {
                 name: 'Error al obtener carrito.',
                 cause: getCartError,
                 message: 'Error al buscar carrito.',
-                code: EErrors.EMPTY_CART_ERROR
+                code: Errors.EMPTY_CART_ERROR
             });
             res.status(500).send(
                 console.log('Carrito no encontrado.')

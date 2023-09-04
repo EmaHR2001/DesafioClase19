@@ -1,20 +1,40 @@
-const EErrors = require('../../../services/errors/enums.js');
+const { Errors } = require('../../../services/errors/enums.js');
 
 function errorHandlerMiddleware(error, req, res, next) {
     console.log(error.cause);
     switch (error.code) {
-        case EErrors.INVALID_TYPES:
+        case Errors.GET_CART_ERROR:
             res.send({ status: 'error', error: error.name });
             break;
 
-        case EErrors.INVALID_PARAM:
+        case Errors.ADD_PRODUCT_ERROR:
             res.send({ status: 'error', error: error.name, cause: error.cause });
             break;
 
-        case EErrors.CART_UPDATE_ERROR:
+        case Errors.CART_UPDATE_ERROR:
             res.send({ status: 'error', error: error.name, cause: error.cause });
             break;
 
+        case Errors.DEL_PRODUCT_ERROR:
+            res.send({ status: 'error', error: error.name });
+            break;
+
+        case Errors.UPDATE_PRODUCT_ERROR:
+            res.send({ status: 'error', error: error.name });
+            break;
+
+        case Errors.EMPTY_CART_ERROR:
+            res.send({ status: 'error', error: error.name });
+            break;
+
+        case Errors.DEL_PRODUCT_CART_ERROR:
+            res.send({ status: 'error', error: error.name });
+            break;
+
+        case Errors.GET_PRODUCT_ERROR:
+            res.send({ status: 'error', error: error.name });
+            break;
+            
         default:
             res.send({ status: 'error', error: 'Unhandled error' });
     }

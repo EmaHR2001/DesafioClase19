@@ -6,13 +6,15 @@ const {getProducts,
   postManyProducts,
   delProductById,
   putProductById,
-  getProductError} = require ('../controller/products.controller')
+  getProductError,
+  prueba} = require ('../controller/products.controller')
 
 const { Router } = express;
 const router = new Router();
 router.use(express.json());
 router.use(express.urlencoded({ extended: true }));
 
+router.get("/prueba", prueba);
 router.get("/", getProducts);
 router.get("/:id", isAdmin, getProductsById);
 router.post("/", isAdmin, postProduct);
