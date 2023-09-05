@@ -3,6 +3,7 @@ const Cart = require('../dao/mongo/models/cart.model')
 const { CustomError } = require('../services/errors/customErrors')
 const { Errors } = require('../services/errors/enums')
 const { idProductCartError, getCartError } = require('../services/errors/info')
+const logger = require('../config/logger.config');
 
 const CartService = require('../dao/mongo/services/cart.services')
 const cartService = new CartService()
@@ -27,7 +28,7 @@ const getCart = (req, res) => {
         })
         .catch(err => {
             res.status(500).send(
-                console.log('Error loading product')
+                logger.error('Error loading product')
             )
         })
 
@@ -43,7 +44,7 @@ const postCart = (req, res) => {
         })
         .catch(err => {
             res.status(500).send(
-                console.log('Error create Cart')
+                logger.error('Error create Cart')
             )
         })
 }
@@ -61,7 +62,7 @@ const getCartById = (req, res) => {
         })
         .catch(err => {
             res.status(500).send(
-                console.log('Error get Cart')
+                logger.info('Error get Cart')
             )
         })
 }
@@ -164,7 +165,7 @@ const delCartById = async (req, res) => {
                 code: Errors.EMPTY_CART_ERROR
             });
             res.status(500).send(
-                console.log('Carrito no encontrado.')
+                logger.info('Carrito no encontrado.')
             )
         })
 }
@@ -329,7 +330,7 @@ const putCartProductsById = (req, res) => {
 
 const purchase = (req, res) => {
     let email = req.session.user
-    console.log(email)
+    logger.info(email)
     res.send('Purchase ok!')
 }
 

@@ -1,6 +1,6 @@
 const serviceProduct = require('../dao/mongo/services/products.services')
 const Service = new serviceProduct()
- 
+const logger = require('../config/logger.config');
 const Product = require("../dao/mongo/models/products.model");
 
 const getRealTimeProducts = (req, res) => {
@@ -19,7 +19,7 @@ const getRealTimeProducts = (req, res) => {
       res.render("realTimeProducts",data);
     })
     .catch((err) => {
-      res.status(500).send(console.log("Error loading product"));
+      res.status(500).send(logger.error("Error loading product"));
     });
 }
 
@@ -35,28 +35,3 @@ module.exports = {
   getRealTimeProducts,
   getRealTimeError
 }
-//   let session = req.session.user
-//   let rol = req.session.user.rol 
-//   Product.find({})
-//     .lean()
-//     .then((pr) => {
-//       const data={ 
-//         products: pr,
-//         style: "realtimeproducts.css",
-//         title: "RealTimeProducts",
-//         session: session
-//     }
-//     data[rol]= session
-//       res.render("realTimeProducts", {data});
-//     })
-//     .catch((err) => {
-//       res.status(500).send(console.log("Error loading product"));
-//     });
-// });
-
-// router.get("*", () => {
-//   res.render("error404", {
-//     style: "error404.css",
-//     title: "Error 404",
-//   });
-// });

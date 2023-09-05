@@ -5,6 +5,7 @@ const User = require('../dao/mongo/models/users.model')
 const Service = require('../dao/mongo/services/cart.services')
 const { createHash, isValidPass } = require('../utils/bcrypt')
 const { githubClientId, githubSecret, githubCallBack } = require('../config/env.config')
+const logger = require('../config/logger.config');
 const fetch = require('node-fetch')
 const cartService = new Service()
 
@@ -17,11 +18,11 @@ const initializePassport = () => {
                 try {
                     let userFound = await User.findOne({ email: username })
                     if (!userFound) {
-                        console.log('User Not Found with username (email) ' + username);
+                        logger.info('User Not Found with username (email) ' + username);
                         return done(null, false);
                     }
                     if (!isValidPass(password, userFound.password)) {
-                        console.log('Invalid Password');
+                        logger.info('Invalid Password');
                         return done(null, false);
                     }
 
@@ -43,7 +44,7 @@ const initializePassport = () => {
                         let userData = req.body
                         let userFound = await User.findOne({ email: username })
                         if (userFound) {
-                            console.log('User already exists')
+                            logger.info('User already exists')
                             done(null, false)
                         }
                         let userNew = {
@@ -102,17 +103,17 @@ const initializePassport = () => {
                             cart: { _id: newCart._id }
                         };
                         let userCreated = await User.create(newUser);
-                        console.log('User Registration succesful');
+                        logger.info('User Registration succesful');
                         return done(null, userCreated);
                     } else {
-                        console.log('User already exists');
-                        console.log('Esto client id es de github :' + githubClientId, ' secret git :' + githubSecret)
+                        logger.info('User already exists');
+                        logger.info('Esto client id es de github :' + githubClientId, ' secret git :' + githubSecret)
                         return done(null, user);
                     }
                 }
                 catch (err) {
-                    console.log('Error en auth github');
-                    console.log(err);
+                    logger.error('Error en auth github');
+                    logger.error(err);
                     return done(err);
                 }
             }

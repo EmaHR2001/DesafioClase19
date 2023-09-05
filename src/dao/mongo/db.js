@@ -1,4 +1,5 @@
 const mongoose= require('mongoose')
+const logger = require('../../config/logger.config');
 
 url= 'mongodb+srv://Coder:spiderverse2099@coder.qugttqn.mongodb.net/'
 
@@ -10,8 +11,8 @@ class ManagerMongo {
 
         connect(){
             return mongoose.connect(this.url+'ecommerce', {useUnifiedTopology:true, useNewUrlParser:true})
-            .then(connect =>{ console.log ('conexion exitosa')})
-            .catch(err=>{console.log(err)})
+            .then(connect =>{ logger.info ('conexion exitosa')})
+            .catch(err=>{logger.error(err)})
         }
     
 }

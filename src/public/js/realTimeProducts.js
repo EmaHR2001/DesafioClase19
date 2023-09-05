@@ -1,9 +1,9 @@
-console.log('Hola soy el cliente')
+const logger = require('../../config/logger.config');
 
 const socket = io()
 
 socket.on('wellcome', (data)=>{
-    console.log(data)
+    logger.debug(data)
 })
 socket.on('newData', (data)=>{
     render(data)

@@ -1,7 +1,8 @@
 const express = require('express')
 const app = express()
 const { port, mongoUrl, secret } = require('./config/env.config')
-const errorHandlerMiddleware = require ('./controller/middlewares/errors/index')
+const errorHandlerMiddleware = require('./controller/middlewares/errors/index')
+const logger = require('./config/logger.config');
 
 //Mongo
 const DataBase = require('./dao/mongo/db')
@@ -87,7 +88,7 @@ const io = new Server(server)
 
 const messages = []
 io.on('connection', (socket) => {
-    console.log('New User connected')
+    logger.info('New User connected')
     socket.emit('wellcome', 'Wellcome new User')
 
     // Comunicacion con realTimeProduct.js
@@ -96,7 +97,7 @@ io.on('connection', (socket) => {
             let product = new Product(data)
             // Verificar si los datos son válidos
             if (!data.title || !data.description || !data.code || !data.price || !data.stock || !data.category) {
-                console.log("Error data")
+                logger.error("Error data product")
             }
             product.save()
                 .then(pr => {
@@ -105,23 +106,21 @@ io.on('connection', (socket) => {
                             io.sockets.emit('newData', pr)
                         })
                         .catch(err => {
-                            console.log('Error loading product');
+                            logger.error('Error loading product');
                             socket.emit('productError', 'Error loading product');
                         })
                 })
                 .catch(err => {
-                    console.log('Error loading product');
+                    logger.error('Error loading product');
                     socket.emit('productError', 'Error loading product');
                 })
         } catch (e) {
-            console.log(e);
+            logger.error(e);
         }
     });
 
 
 });
-
-
 
 app.get('/', (req, res) => {
     if (req.session.user) {
@@ -145,8 +144,19 @@ app.get('/', (req, res) => {
     }
 })
 
+app.get('/loggerTest', (req, res) => {
+    logger.debug('Este es un mensaje de depuración.');
+    logger.http('Este es un mensaje HTTP.');
+    logger.info('Este es un mensaje de información.');
+    logger.warn('Este es un mensaje de advertencia.');
+    logger.error('Este es un mensaje de error.');
+    logger.fatal('Este es un mensaje fatal.');
+    //debug, versobe:http, info, warn, error, fatal
+    res.send('Logs registrados en la consola y en el archivo.');
+});
+
 server.listen(port, () => {
-    console.log('Server is runing on port: ' + port)
+    logger.info('Server is runing on port: ' + port)
     const database = new DataBase(mongoUrl)
     database.connect()
 })

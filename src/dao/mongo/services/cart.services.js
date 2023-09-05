@@ -1,4 +1,5 @@
 const Cart = require("../models/cart.model");
+const logger = require('../../../config/logger.config');
 const uuid4 = require('uuid4')
 
 class CartServices {
@@ -8,7 +9,7 @@ class CartServices {
       const result = await Cart.find();
       return result;
     } catch (err) {
-      console.log('Cartservice - getCart: ' + err)
+      logger.info('Cartservice - getCart: ' + err)
       return null
     }
 
@@ -19,7 +20,7 @@ class CartServices {
       return result;
     }
     catch (err) {
-      console.log('Cartservice - getCartByID: ' + err)
+      logger.info('Cartservice - getCartByID: ' + err)
       return null
     }
   }
@@ -28,12 +29,12 @@ class CartServices {
       const tiempoTranscurrido = Date.now();
       const hoy = new Date(tiempoTranscurrido);
       data.date = hoy.toDateString() + ' ' + uuid4()
-      console.log(data.date);
+      logger.debug(data.date);
       const result = await Cart.create(data);
       return result;
     }
     catch (err) {
-      console.log('Cartservice - postCart: ' + err)
+      logger.error('Cartservice - postCart: ' + err)
       return null
     }
 
@@ -44,7 +45,7 @@ class CartServices {
       return result;
     }
     catch (err) {
-      console.log('Cartservice - updateCart: ' + err)
+      logger.error('Cartservice - updateCart: ' + err)
       return null
     }
   }
@@ -58,7 +59,7 @@ class CartServices {
       return result;
     }
     catch (err) {
-      console.log('Cartservice - delProductsCart: ' + err)
+      logger.error('Cartservice - delProductsCart: ' + err)
       return null
     }
   }

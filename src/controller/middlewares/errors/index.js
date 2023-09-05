@@ -1,7 +1,8 @@
 const { Errors } = require('../../../services/errors/enums.js');
+const logger = require('../../../config/logger.config.js');
 
 function errorHandlerMiddleware(error, req, res, next) {
-    console.log(error.cause);
+    logger.error(error.cause);
     switch (error.code) {
         case Errors.GET_CART_ERROR:
             res.send({ status: 'error', error: error.name });

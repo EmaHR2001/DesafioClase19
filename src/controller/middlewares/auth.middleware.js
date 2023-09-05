@@ -1,3 +1,5 @@
+const logger = require('../../config/logger.config');
+
 function isUser(req, res, next) {
   if (req.session?.user?.email) {
     return next();
@@ -10,7 +12,7 @@ function isUser(req, res, next) {
 
 function isAdmin(req, res, next) {
   let session = req.session.user
-  console.log('Esto es de auth admin : ' + session)
+  logger.info('Esto es de auth admin : ' + session)
   if (req.session?.user?.rol === 'Admin') {
     return next();
   }

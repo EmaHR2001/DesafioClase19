@@ -52,7 +52,6 @@ const getProductsById = async (req, res) => {
         data: product,
       });
   } catch (e) {
-    console.log(e);
     return res.status(500).json({
       status: "error",
       msg: "something went wrong :(",
@@ -196,17 +195,6 @@ const getProductError = () => {
   });
 }
 
-const prueba = () => {
-  const id = "123";
-
-  const error = CustomError.createError({
-    name: 'Error al buscar en la base producto.',
-    cause: updateProductError(id), // Utiliza el ObjectId en lugar de la cadena
-    message: 'Error al buscar en la base producto.',
-    code: Errors.UPDATE_PRODUCT_ERROR
-  });
-}
-
 module.exports = {
   getProducts,
   getProductsById,
@@ -214,6 +202,5 @@ module.exports = {
   postManyProducts,
   delProductById,
   putProductById,
-  getProductError,
-  prueba
+  getProductError
 }

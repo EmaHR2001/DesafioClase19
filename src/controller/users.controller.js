@@ -1,4 +1,5 @@
 const UserServices = require('../dao/mongo/services/users.services')
+const logger = require('../config/logger.config');
 const Service = new UserServices()
 
 
@@ -12,7 +13,7 @@ const getUser = async (req, res) => {
         })
     }
     catch (e) {
-        console.log(e);
+        logger.error(e);
         return res.status(500).json({
             status: 'error',
             msg: 'something went wrong :(',
@@ -38,7 +39,7 @@ const getUserById = async (req, res) => {
             })
     }
     catch (e) {
-        console.log(e);
+        logger.error(e);
         return res.status(500).json({
             status: 'error',
             msg: 'something went wrong :(',
@@ -61,7 +62,7 @@ const delUserById = async (req, res) => {
             data: {},
         });
     } catch (e) {
-        console.log(e);
+        logger.error(e);
         return res.status(500).json({
             status: 'error',
             msg: 'something went wrong :(',
@@ -75,7 +76,7 @@ const putUserById = async (req, res) => {
         const _id = req.params.id;
         const { first_name, last_name, email, age, password, rol } = req.body;
         const data = req.body
-        console.log(_id)
+        logger.debug(_id)
         await Service.updateOne(_id, first_name, last_name, email, age, password, rol)
         return res.status(201).json({
             status: 'success',
@@ -84,7 +85,7 @@ const putUserById = async (req, res) => {
         });
     }
     catch (e) {
-        console.log(e);
+        logger.error(e);
         return res.status(500).json({
             status: 'error',
             msg: 'something went wrong :(',
