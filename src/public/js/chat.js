@@ -1,7 +1,7 @@
 const socket= io()
 const logger = require('../../config/logger.config');
 
-socket.on('wellcome', (data)=> {
+socket.on('welcome', (data)=> {
     logger.info(data)
 })
 

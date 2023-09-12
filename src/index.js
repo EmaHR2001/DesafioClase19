@@ -21,7 +21,6 @@ app.use(cookieParser())
 app.use(session({
     store: MongoStore.create({
         mongoOptions: { useNewUrlParser: true, useUnifiedTopology: true },
-        // ttl:'',
         mongoUrl: mongoUrl + 'ecommerce'
     }),
     secret: secret,
@@ -59,7 +58,10 @@ const sessions = require('./routes/sessions.route')
 app.use('/session', sessions)
 const apiSession = require('./routes/sessions.route.api')
 app.use('/api/session/', apiSession)
-// auth.pasport
+// Password Reset
+const passwordReset = require('./routes/passwordReset.route');
+app.use('/password-reset', passwordReset);
+// Auth passport
 const authPassport = require('./routes/passport.route')
 app.use('/auth', authPassport)
 //Real time Products
@@ -89,7 +91,7 @@ const io = new Server(server)
 const messages = []
 io.on('connection', (socket) => {
     logger.info('New User connected')
-    socket.emit('wellcome', 'Wellcome new User')
+    socket.emit('welcome', 'Welcome new User')
 
     // Comunicacion con realTimeProduct.js
     socket.on('addProduct', (data) => {
@@ -151,7 +153,6 @@ app.get('/loggerTest', (req, res) => {
     logger.warn('Este es un mensaje de advertencia.');
     logger.error('Este es un mensaje de error.');
     logger.fatal('Este es un mensaje fatal.');
-    //debug, versobe:http, info, warn, error, fatal
     res.send('Logs registrados en la consola y en el archivo.');
 });
 

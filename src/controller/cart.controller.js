@@ -11,8 +11,6 @@ const UserService = require('../dao/mongo/services/users.services')
 const userService = new UserService()
 const ProductService = require('../dao/mongo/services/products.services')
 const productService = new ProductService()
-const TicketService = require('../dao/mongo/services/ticket.services')
-const ticketService = new TicketService()
 
 
 const getCart = (req, res) => {
@@ -333,7 +331,6 @@ const purchase = (req, res) => {
     logger.info(email)
     res.send('Purchase ok!')
 }
-
 
 const getCartErrorRender = (req, res) => {
     res.render('error404', {

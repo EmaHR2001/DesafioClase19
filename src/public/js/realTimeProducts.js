@@ -2,7 +2,7 @@ const logger = require('../../config/logger.config');
 
 const socket = io()
 
-socket.on('wellcome', (data)=>{
+socket.on('welcome', (data)=>{
     logger.debug(data)
 })
 socket.on('newData', (data)=>{
