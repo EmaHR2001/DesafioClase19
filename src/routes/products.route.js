@@ -3,7 +3,6 @@ const { isUser, isAdmin } = require("../controller/middlewares/auth.middleware")
 const {getProducts,
   getProductsById,
   postProduct,
-  postManyProducts,
   delProductById,
   putProductById,
   getProductError} = require ('../controller/products.controller')
@@ -16,7 +15,6 @@ router.use(express.urlencoded({ extended: true }));
 router.get("/", getProducts);
 router.get("/:id", isAdmin, getProductsById);
 router.post("/", isAdmin, postProduct);
-router.post("/many", isAdmin, postManyProducts);
 router.delete("/:id", isAdmin, delProductById);
 router.post("/:id", putProductById);
 router.get("*", getProductError);

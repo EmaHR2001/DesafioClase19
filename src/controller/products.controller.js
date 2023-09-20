@@ -78,24 +78,6 @@ const postProduct = async (req, res) => {
     });
   }
 }
-
-const postManyProducts = async (req, res) => {
-  try {
-    const data = req.body;
-    const productCreated = await Service.createMany(data);
-    return res.status(201).json({
-      status: "success",
-      msg: "product created",
-      data: productCreated,
-    });
-  } catch (e) {
-    res.status(500).json({
-      status: "error",
-      msg: "something went wrong :(",
-      data: {},
-    });
-  }
-}
 const delProductById = async (req, res) => {
   const { id } = req.params;
   
@@ -199,7 +181,6 @@ module.exports = {
   getProducts,
   getProductsById,
   postProduct,
-  postManyProducts,
   delProductById,
   putProductById,
   getProductError

@@ -4,6 +4,13 @@ const { port, mongoUrl, secret } = require('./config/env.config')
 const errorHandlerMiddleware = require('./controller/middlewares/errors/index')
 const logger = require('./config/logger.config');
 
+// Swagger
+const swaggerJsDoc = require('swagger-jsdoc')
+const swaggerUiExpress = require('swagger-ui-express')
+const swaggerOptions = require('./swagger-options')
+const specs = swaggerJsDoc(swaggerOptions);
+app.use('/apidocs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
+
 //Mongo
 const DataBase = require('./dao/mongo/db')
 const Product = require('./dao/mongo/models/products.model')

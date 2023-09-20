@@ -1,0 +1,473 @@
+paths:
+  /api/product/:
+    get:
+      summary: Obtener la lista de productos.
+      description: |
+        Esta ruta se utiliza para obtener la lista de productos disponibles.
+      responses:
+        '200':
+          description: Respuesta exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Products'
+              example:
+                status: "success"
+                payload:
+                  - _id: "ObjectId('dsfsdsdg324235236ds')"
+                    title: "Producto 1"
+                    description: "Descripción del Producto 1"
+                    price: 19.99
+                    thumbnail: "imagen1.jpg"
+                    code: "PROD1"
+                    stock: 10
+                    category: "Electrónica"
+                    status: true
+                  - _id: "ObjectId('askjalasdas3425235')"
+                    title: "Producto 2"
+                    description: "Descripción del Producto 2"
+                    price: 29.99
+                    thumbnail: "imagen2.jpg"
+                    code: "PROD2"
+                    stock: 15
+                    category: "Ropa"
+                    status: true
+                totalPages: 3
+                prevPages: 1
+                nextPages: 3
+                page: 2
+                hasPrevPage: true
+                hasNextPage: true
+                prevLink: "1"
+                nextLink: "3"
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: Estado de la solicitud ("error").
+                  msg:
+                    type: string
+                    description: Mensaje de error.
+                  data:
+                    type: object
+                    description: Datos adicionales relacionados con el error.
+    post:
+      summary: Crear un nuevo producto.
+      description: |
+        Esta ruta se utiliza para crear un nuevo producto.
+      requestBody:
+        description: Datos del producto a crear.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewProductInput'
+      responses:
+        '201':
+          description: Producto creado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewProduct'
+              example:
+                productId: "ObjectId('as21312adasfasc323')"
+                title: "Producto de Ejemplo"
+                description: "Descripción del producto de ejemplo."
+                price: 19.99
+                thumbnail: "imagen.jpg"
+                code: "PROD123"
+                stock: 10
+                category: "Electrónica"
+                status: true
+        '400':
+          description: Solicitud incorrecta
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: Estado de la solicitud ("error").
+                  msg:
+                    type: string
+                    description: Mensaje informativo.
+                  data:
+                    type: object
+                    description: Datos relacionados con el error de solicitud incorrecta.
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: Estado de la solicitud ("error").
+                  msg:
+                    type: string
+                    description: Mensaje de error.
+                  data:
+                    type: object
+                    description: Datos adicionales relacionados con el error.
+  /api/product/{id}:
+    get:
+      summary: Obtener un producto por ID.
+      description: |
+        Esta ruta se utiliza para obtener un producto específico por su ID.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del producto que se desea obtener.
+          schema:
+            type: string
+            example: "as21312adasfasc323"
+      responses:
+        '200':
+          description: Respuesta exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product' # Referencia al componente Product
+              example:
+                _id: "ObjectId('as21312adasfasc323')"
+                title: "Producto de Ejemplo"
+                description: "Descripción del producto de ejemplo."
+                price: 19.99
+                thumbnail: "imagen.jpg"
+                code: "PROD123"
+                stock: 10
+                category: "Electrónica"
+                status: true
+        '404':
+          description: Producto no encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: Estado de la solicitud ("error").
+                  msg:
+                    type: string
+                    description: Mensaje informativo ("Product not found").
+                  data:
+                    type: object
+                    description: Datos relacionados con el error de producto no encontrado.
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: Estado de la solicitud ("error").
+                  msg:
+                    type: string
+                    description: Mensaje de error.
+                  data:
+                    type: object
+                    description: Datos adicionales relacionados con el error.
+    delete:
+      summary: Eliminar un producto por ID.
+      description: |
+        Esta ruta se utiliza para eliminar un producto específico por su ID.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del producto que se desea eliminar.
+          schema:
+            type: string
+            example: "as21312adasfasc323"
+      responses:
+        '200':
+          description: Producto eliminado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: Estado de la solicitud ("success").
+                  msg:
+                    type: string
+                    description: Mensaje informativo ("Product deleted").
+                  data:
+                    type: object
+                    description: Datos adicionales relacionados con la eliminación del producto.
+        '400':
+          description: Solicitud incorrecta
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: Estado de la solicitud ("error").
+                  error:
+                    type: string
+                    description: Mensaje de error.
+                  details:
+                    type: string
+                    description: Detalles del error de solicitud incorrecta.
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: Estado de la solicitud ("error").
+                  error:
+                    type: string
+                    description: Mensaje de error.
+                  details:
+                    type: string
+                    description: Detalles del error interno del servidor.
+    put:
+      summary: Actualizar un producto por ID.
+      description: |
+        Esta ruta se utiliza para actualizar un producto específico por su ID.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del producto que se desea actualizar.
+          schema:
+            type: string
+            example: "as21312adasfasc323" # Ejemplo de ObjectId
+      requestBody:
+        description: Datos del producto actualizado.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductInput' # Referencia al componente ProductInput
+            example:
+              title: "Producto Actualizado"
+              description: "Descripción del producto actualizado."
+              price: 29.99
+              thumbnail: ""
+              code: ""
+              stock: 15
+              category: ""
+              status: true
+      responses:
+        '201':
+          description: Producto actualizado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product' # Referencia al componente Product
+              example: # Ejemplo de datos en la respuesta 201
+                _id: "ObjectId('as21312adasfasc323')" # Ejemplo de ObjectId
+                title: "Producto Actualizado"
+                description: "Descripción del producto actualizado."
+                price: 29.99
+                thumbnail: "imagen.jpg"
+                code: "PROD124"
+                stock: 15
+                category: "Electrónica"
+                status: true
+        '400':
+          description: Solicitud incorrecta
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: Estado de la solicitud ("error").
+                  error:
+                    type: string
+                    description: Mensaje de error.
+                  details:
+                    type: string
+                    description: Detalles del error de solicitud incorrecta.
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: Estado de la solicitud ("error").
+                  error:
+                    type: string
+                    description: Mensaje de error.
+                  details:
+                    type: string
+                    description: Detalles del error interno del servidor.
+
+
+components:
+  schemas:
+    Products:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Estado de la solicitud ("success").
+        payload:
+          type: array
+          description: Lista de productos.
+          items:
+            type: object
+            properties:
+              _id:
+                type: ObjectId
+                description: ID del producto.
+              title:
+                type: string
+                description: Nombre del producto.
+              description:
+                type: string
+                description: Descripción del producto.
+              price:
+                type: number
+                description: Precio del producto.
+              thumbnail:
+                type: string
+                description: Imagen del producto.
+              code:
+                type: string
+                description: Código del producto.
+              stock:
+                type: number
+                description: Stock del producto.
+              category:
+                type: string
+                description: Categoría del producto.
+              status:
+                type: boolean
+                description: Disponibilidad del producto.
+        totalPages:
+          type: integer
+          description: Número total de páginas.
+        prevPages:
+          type: integer
+          description: Página anterior (si está disponible).
+        nextPages:
+          type: integer
+          description: Página siguiente (si está disponible).
+        page:
+          type: integer
+          description: Página actual.
+        hasPrevPage:
+          type: boolean
+          description: Indica si hay una página anterior.
+        hasNextPage:
+          type: boolean
+          description: Indica si hay una página siguiente.
+        prevLink:
+          type: string
+          description: Enlace a la página anterior (si está disponible).
+        nextLink:
+          type: string
+          description: Enlace a la página siguiente (si está disponible).
+    Product:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: ID del producto.
+        title:
+          type: string
+          description: Nombre del producto.
+        description:
+          type: string
+          description: Descripción del producto.
+        price:
+          type: number
+          description: Precio del producto.
+        thumbnail:
+          type: string
+          description: Imagen del producto.
+        code:
+          type: string
+          description: Código del producto.
+        stock:
+          type: number
+          description: Stock del producto.
+        category:
+          type: string
+          description: Categoría del producto.
+        status:
+          type: boolean
+          description: Disponibilidad del producto.
+    NewProductInput:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Nombre del producto.
+        description:
+          type: string
+          description: Descripción del producto.
+        price:
+          type: number
+          description: Precio del producto.
+        thumbnail:
+          type: string
+          description: Imagen del producto.
+        code:
+          type: string
+          description: Código del producto.
+        stock:
+          type: number
+          description: Stock del producto.
+        category:
+          type: string
+          description: Categoría del producto.
+        status:
+          type: boolean
+          description: Disponibilidad del producto.
+    NewProduct:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: ID del producto.
+          example: "ObjectId('as21312adasfasc323')"
+        title:
+          type: string
+          description: Nombre del producto.
+        description:
+          type: string
+          description: Descripción del producto.
+        price:
+          type: number
+          description: Precio del producto.
+        thumbnail:
+          type: string
+          description: Imagen del producto.
+        code:
+          type: string
+          description: Código del producto.
+        stock:
+          type: number
+          description: Stock del producto.
+        category:
+          type: string
+          description: Categoría del producto.
+        status:
+          type: boolean
+          description: Disponibilidad del producto.
