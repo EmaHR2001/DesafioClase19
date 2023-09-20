@@ -1,0 +1,206 @@
+paths:
+  /api/cart/:
+    get:
+      summary: Obtener carritos de compra.
+      description: Esta ruta se utiliza para obtener todos los carritos de compra disponibles.
+      responses:
+        '200':
+          description: Respuesta exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartResponse'
+    post:
+      summary: Crear un carrito de compra.
+      description: Esta ruta se utiliza para crear un nuevo carrito de compra.
+      requestBody:
+        description: Datos del carrito de compra a crear.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CartInput'
+            example:
+              date: "2023-09-19"
+              products:
+                - product: "productId1"
+                  quantity: 2
+                - product: "productId2"
+                  quantity: 3
+      responses:
+        '201':
+          description: Carrito de compra creado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartResponse' # Referencia al componente CartResponse
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: Estado de la solicitud ("error").
+                  error:
+                    type: string
+                    description: Mensaje de error.
+
+  /api/cart/{cId}:
+    get:
+      summary: Obtener un carrito de compra por ID.
+      description: Esta ruta se utiliza para obtener un carrito de compra específico por su ID.
+      parameters:
+        - name: cId
+          in: path
+          required: true
+          description: ID del carrito de compra que se desea obtener.
+          schema:
+            type: string
+            example: "c12asdaf345"
+      responses:
+        '200':
+          description: Respuesta exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartResponse' # Referencia al componente CartResponse
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: Estado de la solicitud ("error").
+                  error:
+                    type: string
+                    description: Mensaje de error.
+
+  /api/cart/{cId}/product/{pId}:
+    post:
+      summary: Agregar un producto a un carrito de compra.
+      description: |
+        Esta ruta se utiliza para agregar un producto a un carrito de compra específico.
+      parameters:
+        - name: cId
+          in: path
+          required: true
+          description: ID del carrito de compra al que se desea agregar el producto.
+          schema:
+            type: string
+            example: "c12345" # Ejemplo de ID de carrito de compra
+        - name: pId
+          in: path
+          required: true
+          description: ID del producto que se desea agregar al carrito de compra.
+          schema:
+            type: string
+            example: "productId1" # Ejemplo de ID de producto
+      responses:
+        '200':
+          description: Producto agregado al carrito exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartResponse' # Referencia al componente CartResponse
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: Estado de la solicitud ("error").
+                  error:
+                    type: string
+                    description: Mensaje de error.
+
+
+components:
+  schemas:
+    CartResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Estado de la solicitud ("success").
+        msg:
+          type: string
+          description: Mensaje de éxito.
+        data:
+          type: array
+          description: Lista de carritos de compra.
+          items:
+            type: object
+            properties:
+              date:
+                type: string
+                description: Fecha del carrito de compra.
+              products:
+                type: array
+                description: Lista de productos en el carrito.
+                items:
+                  type: object
+                  properties:
+                    product:
+                      $ref: '#/components/schemas/Product'
+                    quantity:
+                      type: number
+                      description: Cantidad del producto en el carrito.
+
+    Product:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: ID del producto.
+        title:
+          type: string
+          description: Nombre del producto.
+        description:
+          type: string
+          description: Descripción del producto.
+        price:
+          type: number
+          description: Precio del producto.
+        thumbnail:
+          type: string
+          description: Imagen del producto.
+        code:
+          type: string
+          description: Código del producto.
+        stock:
+          type: number
+          description: Stock del producto.
+        category:
+          type: string
+          description: Categoría del producto.
+        status:
+          type: boolean
+          description: Disponibilidad del producto.
+
+    CartInput:
+      type: object
+      properties:
+        date:
+          type: string
+          description: Fecha del carrito de compra.
+        products:
+          type: array
+          description: Lista de productos en el carrito.
+          items:
+            type: object
+            properties:
+              product:
+                type: string
+                description: ID del producto.
+              quantity:
+                type: number
+                description: Cantidad del producto en el carrito.

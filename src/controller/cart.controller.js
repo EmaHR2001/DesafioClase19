@@ -29,7 +29,6 @@ const getCart = (req, res) => {
                 logger.error('Error loading product')
             )
         })
-
 }
 const postCart = (req, res) => {
     let data = req.body
@@ -326,12 +325,6 @@ const putCartProductsById = (req, res) => {
         })
 }
 
-const purchase = (req, res) => {
-    let email = req.session.user
-    logger.info(email)
-    res.send('Purchase ok!')
-}
-
 const getCartErrorRender = (req, res) => {
     res.render('error404', {
         style: 'error404.css',
@@ -351,6 +344,5 @@ module.exports = {
     delCartProductById,
     putCartById,
     putCartProductsById,
-    getCartErrorRender,
-    purchase
+    getCartErrorRender
 }
